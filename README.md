@@ -64,11 +64,11 @@ developing your own process.
 
   - How I debugged:
 
-  i.I got error 500 (Internal server error). I had to look at the server side.
+  i. I got error `500 (Internal server error)`. I had to look at the server side.
 
-  ii.I found "NameError (uninitialized constant ToysController::Toys):". This says that a constant has been used incorrectly in the "create" action.
+  ii. I found `"NameError (uninitialized constant ToysController::Toys):"`. This says that a constant has been used incorrectly in the "create" action.
 
-  iii.The toy object had been created using toy = Toys.create(toy_params). "Toys" is not in line with ActiveRecord's convention of naming classes. I replaced it with "Toy".
+  iii. The toy object had been created using `toy = Toys.create(toy_params)`. "Toys" is not in line with ActiveRecord's convention of naming classes. I replaced it with "Toy".
 
 - Update the number of likes for a toy
 
@@ -76,16 +76,16 @@ developing your own process.
 
   i. On liking a toy, I got the error  `Uncaught (in promise) SyntaxError: Unexpected end of JSON input`. That means that whatever I am getting back is not valid JSON.
 
-  ii.I had to check the update method in the controllers (since our request is a patch request and would be routed to it), and see what was being returned
+  ii. I had to check the update method in the controllers (since our request is a patch request and would be routed to it), and see what was being returned.
 
-  iii.I found the last statement in the update action to be `toy.update(toy_params)`, which is a statement that returns a Toy instance object without serializing it to JSON.
+  iii. I found the last statement in the update action to be `toy.update(toy_params)`, which is a statement that returns a Toy instance object without serializing it to JSON.
 
-  iv.I replaced the statement `toy.update(toy_params)` with `render json: toy.update(toy_params)` to make the action returns a JSON object that is being expected in the front-end
+  iv. I replaced the statement `toy.update(toy_params)` with `render json: toy.update(toy_params)` to make the action returns a JSON object that is being expected in the front-end.
 
 - Donate a toy to Goodwill (and delete it from our database)
 
   - How I debugged:
   
-  i. On clicking "donate a toy to goodwill", I got the ``error; 404 (Not Found)`. With this error, I knew the reasons could be; (1) the object with that id doesn't exist in the database, (2) we are sending the wrong id, (3) we haven't implemented the routes to handle the delete request, or (4) the actual method/action in the controllers is using a different id from what is sent to try to delete the object, and the object with that id doesn't exist.
+  i. On clicking "donate a toy to goodwill", I got the `error; 404 (Not Found)`. With this error, I knew the reasons could be; (1) the object with that id doesn't exist in the database, (2) we are sending the wrong id, (3) we haven't implemented the routes to handle the delete request, or (4) the actual method/action in the controllers is using a different id from what is sent to try to delete the object, and the object with that id doesn't exist.
 
   ii. The destroy action was defined in the controllers but the route that would route delete request to it was not defined. Changed the line from `resources :toys, only: [:index, :create, :update]` to `resources :toys, only: [:index, :create, :update, :destroy]`
